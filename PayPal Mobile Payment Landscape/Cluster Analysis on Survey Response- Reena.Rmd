@@ -1,0 +1,171 @@
+ot run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+
+
+```{r}
+
+
+```
+
+
+```{r}
+
+# Read the data in the data frame called MobilePaymentSurvey
+MobilePaymentSurvey = read.csv("SurveyResponses.csv", header = TRUE)
+head(MobilePaymentSurvey) # To Check the first five rows
+```
+
+```{r}
+# To Check the last five rows
+tail(MobilePaymentSurvey) # Columns and rows look good
+```
+```{r}
+# Compute matrix of distances using euclidean method
+distaceMatrix = dist(MobilePaymentSurvey,method ='euclidean')
+```
+
+```{r}
+# Invoke Ward.D2 method of clustering
+tree = hclust(distaceMatrix, method = "ward.D2")
+plot(tree)
+```
+
+```{r}
+
+plot(tree)
+```
+
+
+
+```{r}
+
+# Add colored boxes around clusters (groups) you identify
+plot(hclust(dist(distaceMatrix))) # To it adds a rectangle to dendrogram,need to plot the dendrogram _first
+x <- rect.hclust(tree, k=4, border="red",)
+```
+```{r}
+
+# Cut tree into 4 clusters 
+clusternumber <- cutree (tree, k = 4 ) # cut tree into k = 4
+clusternumber
+```
+```{r}
+#Create subset of MobilePaymentSurvey data using “subset” function 
+c1 = subset ( MobilePaymentSurvey, clusternumber == 1) 
+c1
+```
+```{r}
+#For c2
+c2 = subset ( MobilePaymentSurvey, clusternumber == 2) 
+c2
+```
+```{r}
+#For c3
+c3 = subset ( MobilePaymentSurvey, clusternumber == 3) 
+c3
+
+```
+```{r}
+# For c4
+c4 = subset ( MobilePaymentSurvey, clusternumber == 4) 
+c4
+
+```
+```{r}
+# To compute mean(average) for each column for c1
+mean(c1$S1)
+ 
+mean(c1$S2) 
+
+mean(c1$S3) 
+
+mean(c1$S4) 
+
+mean(c1$S5) 
+
+mean(c1$S6) 
+
+```
+```{r}
+# To compute mean(average) for each column for c2
+mean(c2$S1)
+
+mean(c2$S2) 
+
+mean(c2$S3) 
+
+mean(c2$S4) 
+
+mean(c2$S5) 
+
+mean(c2$S6) 
+```
+```{r}
+# To compute mean(average) for each column for c3
+mean(c3$S1)
+
+mean(c3$S2) 
+
+mean(c3$S3) 
+
+mean(c3$S4) 
+
+mean(c3$S5) 
+
+mean(c3$S6) 
+
+```
+```{r}
+# To compute mean(average) for each column for c4
+
+mean(c4$S1)
+
+mean(c4$S2) 
+
+mean(c4$S3) 
+
+mean(c4$S4) 
+
+mean(c4$S5) 
+
+mean(c4$S6) 
+
+```
+
+```{r}
+# factoextra to determine the optimal number clusters for a given clustering methods and for data visualization.
+# NbClust for computing about 30 methods at once, in order to find the optimal number of clusters.
+
+#pkgs <- c("factoextra",  "NbClust")
+#install.packages(pkgs)
+```
+
+```{r}
+# Load the packages as follow
+library(factoextra)
+library(NbClust)
+```
+
+```{r}
+# Elbow method
+fviz_nbclust(MobilePaymentSurvey, kmeans, method = "wss") +
+    geom_vline(xintercept = 4, linetype = 2)+
+  labs(subtitle = "Elbow method")
+
+```
+```{r}
+# Silhouette method
+fviz_nbclust(MobilePaymentSurvey, kmeans, method = "silhouette")+
+  labs(subtitle = "Silhouette method")
+
+```
+```{r}
+# Gap statistic
+# nboot = 50 to keep the function speedy. 
+# recommended value: nboot= 500 for your analysis.
+# Use verbose = FALSE to hide computing progression.
+set.seed(123)
+fviz_nbclust(MobilePaymentSurvey, kmeans, nstart = 25,  method = "gap_stat", nboot = 50)+
+  labs(subtitle = "Gap statistic method")
+
+```
+
